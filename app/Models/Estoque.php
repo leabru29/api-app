@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Estoque extends Model
 {
-    /** @use HasFactory<\Database\Factories\EstoqueFactory> */
     use HasFactory;
+
+    protected $table = 'estoques';
+
+    protected $fillable = [
+        'produto_id',
+        'quantidade',
+        'data_validade'
+    ];
 }

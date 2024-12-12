@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('pagamentos', function (Blueprint $table) {
             $table->id();
-            $table->string('pagamento', 50)->unique();
+            $table->enum('pagamento', ['aprovado', 'estornado', 'cancelado']);
             $table->timestamps();
         });
     }

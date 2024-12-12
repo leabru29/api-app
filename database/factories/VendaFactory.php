@@ -2,22 +2,23 @@
 
 namespace Database\Factories;
 
+use App\Models\Cliente;
+use App\Models\Pagamento;
+use App\Models\Produto;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Venda>
- */
 class VendaFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+        $cliente = Cliente::inRandomOrder()->first();
+        $produto = Produto::inRandomOrder()->first();
+        $pagamento = Pagamento::inRandomOrder()->first();
         return [
-            //
+            'cliente_id' => $cliente->id,
+            'produto_id' => $produto->id,
+            'quantidade' => rand(1, 10),
+            'pagamento_id' => $pagamento->id
         ];
     }
 }

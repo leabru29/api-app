@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Categoria;
+use App\Models\Pagamento;
 use Illuminate\Database\Seeder;
 
-class CategoriaSeeder extends Seeder
+class PagamentoSeeder extends Seeder
 {
     public function run(): void
     {
-        Categoria::factory(5)->create();
+        Pagamento::factory(4)->create();
     }
 }

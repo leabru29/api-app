@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Venda extends Model
 {
-    /** @use HasFactory<\Database\Factories\VendaFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'cliente_id',
+        'produto_id',
+        'quantidade',
+        'pagamento_id'
+    ];
 }

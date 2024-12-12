@@ -4,12 +4,13 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CategoriaFactory extends Factory
+class PagamentoFactory extends Factory
 {
     public function definition(): array
     {
+        $pagamento = ['aprovado', 'estornado', 'cancelado'];
         return [
-            'nome' => fake()->firstName()
+            'pagamento' => $pagamento[array_rand($pagamento)]
         ];
     }
 }

@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('produtos', function (Blueprint $table) {
             $table->id();
-            $table->string('nome')->unique();
+            $table->string('nome');
             $table->string('descricao');
             $table->float('preco');
             $table->foreignUuid('fornecedor_id')->constrained('fornecedores')->cascadeOnUpdate();
