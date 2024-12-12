@@ -6,23 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCategoriaRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'nome' => [
+                'required',
+                'string',
+                'max:30',
+                // Validação de unicidade por fornecedor, ignorando o ID atual
+                'unique:categorias,nome,' . $this->route('categoria') . ',id,fornecedor_id,' . $this->input('fornecedor_id'),
+            ],
         ];
     }
 }

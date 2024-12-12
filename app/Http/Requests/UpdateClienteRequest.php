@@ -6,23 +6,22 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateClienteRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'required|string|max:150',
+            'cpf' => [
+                'required',
+                'cpf',
+                // Validação de unicidade, ignorando o ID atual
+                'unique:clientes,cpf,' . $this->route('cliente'),
+            ],
+            'telefone' => 'required|celular_com_ddd',
         ];
     }
 }

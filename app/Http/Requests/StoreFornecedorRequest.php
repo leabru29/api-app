@@ -6,23 +6,22 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreFornecedorRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'required',
+            'cnpj' => 'required|cnpj|unique:fornecedores,cnpj',
+            'logradouro' => 'required|string|max:255',
+            'numero' => 'required|integer',
+            'complemento' => 'nullable|string|max:255',
+            'bairro' => 'required|string|max:150',
+            'cidade' => 'required|string|max:100',
+            'uf' => 'required|string|min:2|max:20'
         ];
     }
 }
