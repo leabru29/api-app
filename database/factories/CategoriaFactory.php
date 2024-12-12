@@ -12,7 +12,7 @@ class CategoriaFactory extends Factory
         $fornecedor = Fornecedor::inRandomOrder()->first();
 
         return [
-            'nome' => fake()->firstName(),
+            'nome' => fake()->unique()->firstName,
             'fornecedor_id' => $fornecedor->id
         ];
     }

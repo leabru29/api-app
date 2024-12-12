@@ -21,6 +21,7 @@ class StoreCategoriaRequest extends FormRequest
                 // Valida o nome único se o fornecedor for o mesmo
                 'unique:categorias,nome,NULL,id,fornecedor_id,' . $this->input('fornecedor_id'),
             ],
+            'fornecedor_id' => 'required|exists:fornecedores,id'
         ];
     }
 }

@@ -19,8 +19,9 @@ class UpdateCategoriaRequest extends FormRequest
                 'string',
                 'max:30',
                 // Validação de unicidade por fornecedor, ignorando o ID atual
-                'unique:categorias,nome,' . $this->route('categoria') . ',id,fornecedor_id,' . $this->input('fornecedor_id'),
+                'unique:categorias,nome,' . $this->route('categoria')->id . ',id,fornecedor_id,' . $this->input('fornecedor_id'),
             ],
+            'fornecedor_id' => 'required|exists:fornecedores,id'
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCategoriaRequest;
 use App\Http\Requests\UpdateCategoriaRequest;
 use App\Models\Categoria;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class CategoriaController extends Controller
 {
@@ -19,7 +20,7 @@ class CategoriaController extends Controller
     {
         $dados = $request->all();
         $categoria = Categoria::create($dados);
-        return response()->json(['message' => 'Categoria ' . $categoria->nome . ' cadastrada com sucesso!']);
+        return response()->json(['message' => 'Categoria ' . $categoria->nome . ' cadastrada com sucesso!'], Response::HTTP_CREATED);
     }
 
     public function show(Categoria $categoria): JsonResponse
@@ -30,10 +31,10 @@ class CategoriaController extends Controller
 
     public function update(UpdateCategoriaRequest $request, Categoria $categoria)
     {
-        $dados = $request->all();
-        $categoria->update($dados);
+        $categoria->update($request->validated());
         return response()->json(['message' => 'Categoria ' . $categoria->nome . ' atualizada com sucesso!']);
     }
+
 
     public function destroy(Categoria $categoria)
     {
