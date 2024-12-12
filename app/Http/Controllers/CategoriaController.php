@@ -5,62 +5,39 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategoriaRequest;
 use App\Http\Requests\UpdateCategoriaRequest;
 use App\Models\Categoria;
+use Illuminate\Http\JsonResponse;
 
 class CategoriaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $categorias = Categoria::with('fornecedor', 'produtos')->get();
+        return response()->json($categorias);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreCategoriaRequest $request): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $categoria = Categoria::create($dados);
+        return response()->json(['message' => 'Categoria ' . $categoria->nome . ' cadastrada com sucesso!']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCategoriaRequest $request)
+    public function show(Categoria $categoria): JsonResponse
     {
-        //
+        $categoria->load('fornecedor', 'produtos');
+        return response()->json($categoria);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Categoria $categoria)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Categoria $categoria)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateCategoriaRequest $request, Categoria $categoria)
     {
-        //
+        $dados = $request->all();
+        $categoria->update($dados);
+        return response()->json(['message' => 'Categoria ' . $categoria->nome . ' atualizada com sucesso!']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Categoria $categoria)
     {
-        //
+        $categoria->delete();
+        return response()->json(['message' => 'Categoria excluída com sucesso!']);
     }
 }

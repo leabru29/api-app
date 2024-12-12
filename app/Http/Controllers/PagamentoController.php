@@ -5,62 +5,39 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePagamentoRequest;
 use App\Http\Requests\UpdatePagamentoRequest;
 use App\Models\Pagamento;
+use Illuminate\Http\JsonResponse;
 
 class PagamentoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $pagamentos = Pagamento::with('venda')->get();
+        return response()->json($pagamentos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StorePagamentoRequest $request): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $pagamento = Pagamento::create($dados);
+        return response()->json(['message' => 'Pagamento ' . $pagamento->pagamento . ' salvo com sucesso!']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorePagamentoRequest $request)
+    public function show(Pagamento $pagamento): JsonResponse
     {
-        //
+        $pagamento->load('venda');
+        return response()->json($pagamento);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Pagamento $pagamento)
+    public function update(UpdatePagamentoRequest $request, Pagamento $pagamento): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $pagamento->update($dados);
+        return response()->json(['message' => 'Pagamento' . $pagamento->pagamento . ' atualizado com sucesso!']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Pagamento $pagamento)
+    public function destroy(Pagamento $pagamento): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePagamentoRequest $request, Pagamento $pagamento)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Pagamento $pagamento)
-    {
-        //
+        $pagamento->delete();
+        return response()->json(['message' => 'Pagamento deletado com sucesso!']);
     }
 }

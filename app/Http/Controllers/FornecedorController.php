@@ -5,62 +5,39 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFornecedorRequest;
 use App\Http\Requests\UpdateFornecedorRequest;
 use App\Models\Fornecedor;
+use Illuminate\Http\JsonResponse;
 
 class FornecedorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $fornecedores = Fornecedor::with('categorias.produtos')->get();
+        return response()->json($fornecedores);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreFornecedorRequest $request): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $fornecedor = Fornecedor::create($dados);
+        return response()->json(['message' => 'Fornecedor ' . $fornecedor->nome . ' cadastrado com sucesso!']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreFornecedorRequest $request)
+    public function show(Fornecedor $fornecedor): JsonResponse
     {
-        //
+        $fornecedor->load('categorias.produtos');
+        return response()->json($fornecedor);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Fornecedor $fornecedor)
+    public function update(UpdateFornecedorRequest $request, Fornecedor $fornecedor): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $fornecedor->update($dados);
+        return response()->json(['message' => 'Fornecedor ' . $fornecedor->nome . ' atualizado com sucesso!']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Fornecedor $fornecedor)
+    public function destroy(Fornecedor $fornecedor): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateFornecedorRequest $request, Fornecedor $fornecedor)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Fornecedor $fornecedor)
-    {
-        //
+        $fornecedor->delete();
+        return response()->json(['message' => 'Fornecedor excluído com sucesso!']);
     }
 }

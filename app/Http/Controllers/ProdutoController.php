@@ -5,62 +5,39 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProdutoRequest;
 use App\Http\Requests\UpdateProdutoRequest;
 use App\Models\Produto;
+use Illuminate\Http\JsonResponse;
 
 class ProdutoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $produtos = Produto::with('categoria.fornecedor')->get();
+        return response()->json($produtos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreProdutoRequest $request): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $produto = Produto::create($dados);
+        return response()->json(['message' => 'Produto ' . $produto->nome . ' cadastrado com sucesso!']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreProdutoRequest $request)
+    public function show(Produto $produto): JsonResponse
     {
-        //
+        $produto->load('categoria.fornecedor');
+        return response()->json($produto);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Produto $produto)
+    public function update(UpdateProdutoRequest $request, Produto $produto): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $produto->update($dados);
+        return response()->json(['message' => 'Produto ' . $produto->nome . ' atualizado com sucesso!']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Produto $produto)
+    public function destroy(Produto $produto): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateProdutoRequest $request, Produto $produto)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Produto $produto)
-    {
-        //
+        $produto->delete();
+        return response()->json(['message' => 'Produto deletado com sucesso!']);
     }
 }

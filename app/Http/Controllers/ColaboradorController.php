@@ -5,62 +5,38 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreColaboradorRequest;
 use App\Http\Requests\UpdateColaboradorRequest;
 use App\Models\Colaborador;
+use Illuminate\Http\JsonResponse;
 
 class ColaboradorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $colaboradores = Colaborador::all();
+        return response()->json($colaboradores);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreColaboradorRequest $request): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $colaborador = Colaborador::create($dados);
+        return response()->json(['message' => 'Colaborador ' . $colaborador->nome . ' cadastrado com sucesso!']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreColaboradorRequest $request)
+    public function show(Colaborador $colaborador): JsonResponse
     {
-        //
+        return response()->json($colaborador);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Colaborador $colaborador)
+    public function update(UpdateColaboradorRequest $request, Colaborador $colaborador): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $colaborador->update($dados);
+        return response()->json(['message' => 'Colaborador ' . $colaborador->nome . ' atualizado com sucesso!']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Colaborador $colaborador)
+    public function destroy(Colaborador $colaborador): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateColaboradorRequest $request, Colaborador $colaborador)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Colaborador $colaborador)
-    {
-        //
+        $colaborador->delete();
+        return response()->json(['message' => 'Colaborador excluído com sucesso!']);
     }
 }

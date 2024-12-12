@@ -5,62 +5,39 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreClienteRequest;
 use App\Http\Requests\UpdateClienteRequest;
 use App\Models\Cliente;
+use Illuminate\Http\JsonResponse;
 
 class ClienteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $clientes = Cliente::with('vendas')->get();
+        return response()->json($clientes);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreClienteRequest $request): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $cliente = Cliente::create($dados);
+        return response()->json(['message' => 'Cliente ' . $cliente->nome . ' cadastrado com sucesso!']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreClienteRequest $request)
+    public function show(Cliente $cliente): JsonResponse
     {
-        //
+        $cliente->load('vendas');
+        return response()->json($cliente);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Cliente $cliente)
+    public function update(UpdateClienteRequest $request, Cliente $cliente): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $cliente->update($dados);
+        return response()->json(['message' => 'Cliente ' . $cliente->nome . ' atualizado com sucesso!']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Cliente $cliente)
+    public function destroy(Cliente $cliente): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateClienteRequest $request, Cliente $cliente)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Cliente $cliente)
-    {
-        //
+        $cliente->delete();
+        return response()->json(['message' => 'Cliente excluído com sucesso!']);
     }
 }

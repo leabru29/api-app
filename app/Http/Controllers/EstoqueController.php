@@ -5,62 +5,39 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEstoqueRequest;
 use App\Http\Requests\UpdateEstoqueRequest;
 use App\Models\Estoque;
+use Illuminate\Http\JsonResponse;
 
 class EstoqueController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $estoques = Estoque::with('produto.categoria.fornecedor')->get();
+        return response()->json($estoques);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreEstoqueRequest $request): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $estoque = Estoque::create($dados);
+        return response()->json(['message' => 'Novo estoque do produto ' . $estoque->produto->nome . ' cadastrado com sucesso!']);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreEstoqueRequest $request)
+    public function show(Estoque $estoque): JsonResponse
     {
-        //
+        $estoque->load('produto.categoria.fornecedor');
+        return response()->json($estoque);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Estoque $estoque)
+    public function update(UpdateEstoqueRequest $request, Estoque $estoque): JsonResponse
     {
-        //
+        $dados = $request->all();
+        $estoque->update($dados);
+        return response()->json(['message' => 'Novo estoque do produto ' . $estoque->produto->nome . ' atualizado com sucesso!']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Estoque $estoque)
+    public function destroy(Estoque $estoque): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateEstoqueRequest $request, Estoque $estoque)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Estoque $estoque)
-    {
-        //
+        $estoque->delete();
+        return response()->json(['message' => 'Estoque excluído com sucesso!']);
     }
 }
